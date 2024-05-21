@@ -15,7 +15,7 @@ class FIFOCache(BaseCaching):
             return
 
         if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-            discarded_key, _ = next(iter(self.cache_data.items()))
+            discarded_key = list(self.cache_data.keys())[0]
             del self.cache_data[discarded_key]
             print(f"DISCARD: {discarded_key}")
 
