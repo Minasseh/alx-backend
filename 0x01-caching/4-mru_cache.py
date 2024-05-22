@@ -20,9 +20,13 @@ class MRUCache(BaseCaching):
         if key is None or item is None:
             return
 
-        if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-            discarded_key, _ = self.cache_data.popitem()
-            print(f"DISCARD: {discarded_key}")
+        if key in self.cache_data:
+            self.cache_data[key] = item
+            self.cache_data.move_to_end(key)
+        else:
+            if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
+                discarded_key, _ = self.cache_data.popitem()
+                print(f"DISCARD: {discarded_key}")
 
         self.cache_data[key] = item
 
@@ -30,6 +34,7 @@ class MRUCache(BaseCaching):
         """ Get an item by key
         """
         if key in self.cache_data:
+            self.cache_data.move_to_end(key)
             return self.cache_data[key]
         else:
             return None
